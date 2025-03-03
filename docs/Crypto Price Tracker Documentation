@@ -1,0 +1,122 @@
+Crypto Price Tracker Documentation
+
+Introduction
+
+This document serves as the official guide for the Crypto Price Tracker project. It provides essential information on setting up the project, integrating APIs, managing state, and addressing challenges encountered during development. Unlike the README, which offers a brief overview, this document is a comprehensive reference designed for developers working on the project.
+
+Project Setup Guide
+
+Prerequisites
+
+Ensure you have the following installed:
+
+Node.js (LTS version recommended)
+
+npm or yarn
+
+Expo CLI (for mobile app)
+
+Setting Up the Web App
+
+Clone the repository:
+
+git clone https://github.com/airbowen/Crypto-Price-Tracker.git
+cd Crypto-Price-Tracker/web
+
+Install dependencies:
+
+npm install
+
+Start the development server:
+
+npm run dev
+
+Open the browser and navigate to http://localhost:3000.
+
+Setting Up the Mobile App
+
+Navigate to the mobile app directory:
+
+cd ../mobile
+
+Install dependencies:
+
+npm install
+
+Start the development server:
+
+expo start
+
+Scan the QR code with the Expo Go app to run on a physical device.
+
+API Integration Details
+
+Fetching Data
+
+The project integrates with a public cryptocurrency API to retrieve real-time prices. Data fetching is handled using fetch in JavaScript.
+
+Example API Call
+
+const fetchCryptoPrices = async () => {
+  const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd');
+  const data = await response.json();
+  return data;
+};
+
+Updating Data
+
+To ensure real-time updates, the app uses polling at regular intervals.
+
+useEffect(() => {
+  const interval = setInterval(fetchCryptoPrices, 30000);
+  return () => clearInterval(interval);
+}, []);
+
+State Management Explanation
+
+Why React Query?
+
+We chose React Query for efficient data fetching and caching. It simplifies API requests and keeps the UI in sync with the latest data.
+
+Example with React Query
+
+import { useQuery } from 'react-query';
+
+const useCryptoPrices = () => {
+  return useQuery('cryptoPrices', fetchCryptoPrices, {
+    refetchInterval: 30000,
+  });
+};
+
+Alternative State Management Approaches
+
+Zustand: If fine-grained state control is needed.
+
+Context API: Suitable for global state but lacks built-in caching.
+
+Challenges & Solutions
+
+1. API Rate Limits
+
+Challenge: The public API has rate limits, restricting frequent requests.
+
+Solution: Implemented caching using React Query and reduced polling frequency.
+
+2. UI Performance
+
+Challenge: Frequent re-renders caused performance issues.
+
+Solution: Used memoization (useMemo, useCallback) to optimize rendering.
+
+3. Cross-Platform Differences
+
+Challenge: Styling inconsistencies between web and mobile.
+
+Solution: Used Tailwind CSS for web and React Native’s StyleSheet API for mobile.
+
+Conclusion
+
+This documentation provides an overview of setting up and managing the Crypto Price Tracker project. For further assistance, feel free to raise issues on the GitHub repository.
+
+Happy coding! 🚀
+
